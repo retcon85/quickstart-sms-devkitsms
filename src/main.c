@@ -1,6 +1,8 @@
 #include "SMSlib.h"
-// #include "PSGlib.h"                uncomment if you want to use PSGlib
-// #include "bank2.h"                 e.g. if using sverx's assets2banks utilitiy
+#ifdef USEPSGLIB                  // Set USEPSGLIB := true in Makefile to build with PSGlib for music and sounds
+#include "PSGlib.h"
+#endif
+#include "assets.generated.h"     // e.g. if using sverx's assets2banks utilitiy
 
 SMS_EMBED_SEGA_ROM_HEADER(0, 0);  //  includes the TMR SEGA header in the ROM image
 
@@ -16,7 +18,7 @@ void main(void)
     SMS_waitForVBlank();
     if (!paused)
     {
-      // PSGFrame();                   if using PSGlib you must call PSGFrame at *regular* intervals, e.g. here
+      // PSGFrame();                   // if using PSGlib you must call PSGFrame at *regular* intervals, e.g. here
     }
     SMS_copySpritestoSAT();
     if (SMS_queryPauseRequested())
