@@ -19,7 +19,7 @@ HEADEREXT := h
 ENTRYPOINT := main
 SMSLIB_DIR := /usr/local/share/sdcc/lib/sms
 SMSINC_DIR := /usr/local/share/sdcc/include/sms
-IMG_CONVERTER := /usr/local/bin/img2tiles
+IMG_CONVERTER := img2tiles
 ifeq ("$(USEPSGLIB)", "true")
 PSGLIB := $(SMSLIB_DIR)/PSGlib.rel
 PSGMACRO := -DUSEPSGLIB
