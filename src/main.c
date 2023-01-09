@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "SMSlib.h"
 #ifdef USEPSGLIB // Set USEPSGLIB := true in Makefile to build with PSGlib for music and sounds
 #include "PSGlib.h"
@@ -6,7 +7,7 @@
 
 SMS_EMBED_SEGA_ROM_HEADER(0, 0); //  includes the TMR SEGA header in the ROM image
 
-unsigned char paused = 0;
+uint8_t paused = 0;
 
 void main(void)
 {
