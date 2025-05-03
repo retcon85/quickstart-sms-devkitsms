@@ -1,0 +1,20 @@
+{
+  "files.associations": {
+    "*.txt": "plaintext",
+    "*.inc": "wla-dx-asm",
+    "*.lib": "wla-dx-asm",
+    "*.h": "c"
+  },
+  "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+  "C_Cpp.default.includePath": [
+    "/opt/sdcc/share/sdcc/include",
+    "/opt/devkitsms/include",
+    "./src",
+    "./src/**",
+    "./assets/build"
+  ],
+  "C_Cpp.default.defines": [
+    "__banked=",
+    "USEPSGLIB"
+  ]
+}

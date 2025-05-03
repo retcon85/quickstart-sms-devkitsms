@@ -1,5 +1,4 @@
 build/
 *.lst
+.DS_Store
 *.generated.*
-.vscode
-_h/

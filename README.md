@@ -11,8 +11,6 @@
 
 See [here](https://github.com/retcon85/toolchain-sms/blob/main/README.md#usage) for instructions on pulling and using the image.
 
-**Note:** this Docker image has currently only been tested under MacOS, although it would be expected to work under Linux also.
-
 or
 
 ### Installing dependencies manually
@@ -31,6 +29,6 @@ or
 
 Run `make clean` to clean the build
 
-## Example program
+## Hello World
 
-!TODO: include one...
+Minimal code and assets are provided to produce an animated Hello World demo illustrating some basic functionality.

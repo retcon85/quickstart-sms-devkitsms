@@ -1,0 +1,17 @@
+# name: Build
+
+# on:
+#   push:
+#     branches: [ "main" ]
+
+# jobs:
+
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v4
+#     - name: Build
+#       uses: docker://retcon85/toolchain-sms:1.0
+#       with:
+#         args: |
+#           "make clean assets && make build"
