@@ -7,6 +7,9 @@ on:
     tags:
       - '*'
 
+env:
+  PROJECTNAME_BASE: ${{ vars.PROJECTNAME || 'hello-world' }}
+
 jobs:
 
   build:
@@ -17,7 +20,7 @@ jobs:
     - name: Build
       uses: docker://retcon85/toolchain-sms:1.0
       env:
-        PROJECTNAME: my-project-name-v${{ github.ref_name }}
+        PROJECTNAME: ${{ github.event_name == 'create' && format('{0}-v{1}', env.PROJECTNAME_BASE, github.ref_name) || format('{0}-DEV', env.PROJECTNAME_BASE) }}
       with:
         args: |
           "make clean all"
