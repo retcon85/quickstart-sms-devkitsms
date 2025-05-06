@@ -18,14 +18,9 @@ export SMSINC_DIR := /opt/devkitsms/include
 export MKDIR := mkdir -p
 
 .PHONY: all
-all: assets
+all:
 	@$(MAKE) --no-print-directory --directory=./src
-
-.PHONY: assets
-assets:
-	@$(MAKE) --no-print-directory --directory=./assets
 
 .PHONY: clean
 clean:
-	@$(MAKE) --no-print-directory --directory=./assets clean
 	@$(MAKE) --no-print-directory --directory=./src clean
