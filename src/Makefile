@@ -17,9 +17,10 @@ psgmacro := -DUSEPSGLIB
 endif
 
 target := $(TARGETDIR)$(PROJECTNAME).$(TARGET_EXTENSION)
-sources := $(foreach dir,$(all_source_dirs),$(wildcard $(dir)*.c))
 headers := $(foreach dir,$(all_source_dirs),$(wildcard $(dir)*.h))
 banked_sources := $(foreach dir,$(all_source_dirs),$(wildcard $(dir)*.bank*.c))
+# using glob for sources. alternatively provide explict source lists here
+sources := $(foreach dir,$(all_source_dirs),$(wildcard $(dir)*.c))
 
 objects := $(patsubst %.c,$(TARGETDIR)%.rel,$(sources))
 banked_objects := $(patsubst %.c,$(TARGETDIR)%.rel,$(banked_sources))
