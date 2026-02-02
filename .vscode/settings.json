@@ -15,6 +15,13 @@
   ],
   "C_Cpp.default.defines": [
     "__banked=",
+    "__at(n)=",
+    "__z88dk_fastcall=",
+    "__z88dk_callee=",
+    "__preserves_regs(...)=",
+    "__naked=",
+    "__sdcccall(n)=",
+    "__sfr=",
     "USEPSGLIB"
   ]
 }

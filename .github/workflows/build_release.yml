@@ -18,7 +18,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Build
-      uses: docker://retcon85/toolchain-sms:1.0
+      uses: docker://retcon85/toolchain-sms:1.1
       env:
         PROJECTNAME: ${{ github.event_name == 'create' && format('{0}-v{1}', env.PROJECTNAME_BASE, github.ref_name) || format('{0}-DEV', env.PROJECTNAME_BASE) }}
       with:

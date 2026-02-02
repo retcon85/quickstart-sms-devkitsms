@@ -34,6 +34,7 @@ sorted_banked_objects := $(subst :slash:,/,$(notdir $(sort $(join $(suffix $(bas
 mains := $(TARGETDIR)./$(ENTRYPOINT).rel
 
 # main build target
+.PHONY: build
 build: $(target)
 
 # create the build folder if it doesn't exist

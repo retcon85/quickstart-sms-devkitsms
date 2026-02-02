@@ -21,6 +21,10 @@ export MKDIR := mkdir -p
 all: assets
 	@$(MAKE) --no-print-directory --directory=./src
 
+.PHONY: build
+build:
+	@$(MAKE) --no-print-directory --directory=./src
+
 .PHONY: assets
 assets:
 	@$(MAKE) --no-print-directory --directory=./assets

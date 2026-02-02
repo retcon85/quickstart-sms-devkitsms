@@ -1,3 +1,6 @@
+#ifndef ASSETS_H_
+#define ASSETS_H_
+
 #include "assets.generated.h"
 
 // add any custom (i.e. non-generated) asset definitions here
@@ -6,3 +9,5 @@
 #define SFX_BANK bleep_psg_bank
 #define MUSIC_BANK 0
 // END:EXAMPLE
+
+#endif

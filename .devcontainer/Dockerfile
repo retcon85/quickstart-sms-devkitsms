@@ -1,4 +1,4 @@
-FROM retcon85/toolchain-sms:1.0-slim
+FROM retcon85/toolchain-sms:1.1-slim
 
 # EXAMPLE
 # install ohmyzsh
