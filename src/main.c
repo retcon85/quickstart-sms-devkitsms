@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include <stdbool.h>
+// include SMSlib (DevkitSMS) - see https://github.com/sverx/devkitSMS for docs
 #include "SMSlib.h"
 #ifdef USEPSGLIB // Set USEPSGLIB := true in Makefile to build with PSGlib for music and sounds
+// include PSGlib (DevkitSMS) - see https://github.com/sverx/devkitSMS/tree/master/PSGlib for docs
 #include "PSGlib.h"
 #endif
 #include "rom.h"
@@ -9,6 +11,9 @@
 
 static bool paused = false;
 
+/**
+ * ADD ONE-OFF GAME INITIALIZATION CODE HERE!
+ */
 inline void game_init(void)
 {
   // EXAMPLE
@@ -28,6 +33,9 @@ inline void game_init(void)
   // END:EXAMPLE
 }
 
+/**
+ * UPDATE THE GAME ON EVERY FRAME HERE!
+ */
 inline void game_tick(void)
 {
   // EXAMPLE
@@ -54,6 +62,9 @@ inline void game_tick(void)
   // END:EXAMPLE
 }
 
+/**
+ * BOILERPLATE / STRUCTURAL FUNCTIONS BELOW
+ */
 inline void play_audio_frames(void)
 {
 #ifdef USEPSGLIB
@@ -69,6 +80,9 @@ inline void play_audio_frames(void)
 #endif
 }
 
+/**
+ * THE MAIN ENTRYPOINT - EVERYTHING STARTS HERE!
+ */
 void main(void)
 {
   // do any one-off game initialization
