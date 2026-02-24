@@ -20,7 +20,7 @@ jobs:
     - name: Build
       uses: docker://retcon85/toolchain-sms:1.1
       env:
-        PROJECTNAME: ${{ github.event_name == 'create' && format('{0}-v{1}', env.PROJECTNAME_BASE, github.ref_name) || format('{0}-DEV', env.PROJECTNAME_BASE) }}
+        PROJECTNAME: ${{ github.event_name == 'create' && format('{0}-{1}', env.PROJECTNAME_BASE, github.ref_name) || format('{0}-DEV', env.PROJECTNAME_BASE) }}
       with:
         args: |
           "make clean all"
@@ -49,7 +49,7 @@ jobs:
       # else try to create a release without a discussion post
       run: |
         gh release upload ${{ github.ref_name }} *.sms --clobber || \
-        gh release create ${{ github.ref_name }} --generate-notes --title '${{ github.repository }} v${{ github.ref_name }}' --discussion-category 'Announcements' *.sms || \
-        gh release create ${{ github.ref_name }} --generate-notes --title '${{ github.repository }} v${{ github.ref_name }}' *.sms
+        gh release create ${{ github.ref_name }} --generate-notes --title '${{ github.repository }} ${{ github.ref_name }}' --discussion-category 'Announcements' *.sms || \
+        gh release create ${{ github.ref_name }} --generate-notes --title '${{ github.repository }} ${{ github.ref_name }}' *.sms
       env:
         GH_TOKEN: ${{ github.token }}
