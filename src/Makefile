@@ -4,6 +4,13 @@ TARGETDIR ?= ../build/
 PROJECTNAME ?= $(notdir $(CURDIR))
 TARGET_EXTENSION ?= sms
 SMSLIB_DIR ?= /opt/devkitsms/lib
+DEFINES := 
+ifeq ("$(TARGET_EXTENSION)", "gg")
+	SMSLIB_VARIANT := SMSlib_GG.lib
+	DEFINES += -DTARGET_GG
+else
+	SMSLIB_VARIANT := SMSlib.lib
+endif
 SMSINC_DIR ?= /opt/devkitsms/include
 ENTRYPOINT ?= main
 USEPSGLIB ?= 1
@@ -48,21 +55,20 @@ $(target): $(TARGETDIR)$(ENTRYPOINT).ihx
 
 # link stage - generally runs once to create a single output
 %.ihx: $(objects)
-	sdcc -L$(SMSLIB_DIR) -o$@ -mz80 --no-std-crt0 --data-loc 0xC000 $(banks) $(SMSLIB_DIR)/crt0_sms.rel $(mains) SMSlib.lib $(psglib) $(filter-out $(mains) $(banked_objects),$(objects)) $(sorted_banked_objects)
+	sdcc -L$(SMSLIB_DIR) -o$@ -mz80 --no-std-crt0 --data-loc 0xC000 $(banks) $(SMSLIB_DIR)/crt0_sms.rel $(mains) $(SMSLIB_VARIANT) $(psglib) $(filter-out $(mains) $(banked_objects),$(objects)) $(sorted_banked_objects)
 
 # compile unbanked sources
 $(filter-out $(banked_objects), $(objects)): $(TARGETDIR)%.rel: %.c $(headers) Makefile | $(TARGETDIR)
 	$(MKDIR) $(TARGETDIR)$(dir $*)
-	sdcc $(include_options) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
+	sdcc $(include_options) $(DEFINES) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
 
 # compile banked sources
 $(banked_objects): $(TARGETDIR)%.rel: %.c $(headers) Makefile | $(TARGETDIR)
 	$(MKDIR) $(TARGETDIR)$(dir $*)
-	sdcc $(include_options) --constseg $(subst .,,$(suffix $(basename $<))) -DTHIS_BANK=$(subst .bank,,$(suffix $(basename $<))) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
+	sdcc $(include_options) --constseg $(subst .,,$(suffix $(basename $<))) $(DEFINES) -DTHIS_BANK=$(subst .bank,,$(suffix $(basename $<))) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
 
 # make clean to remove the build folder and all generated files
 .PHONY: clean
 clean:
 	rm -rf $(TARGETDIR)
 	-@rm -r *.generated*.*
-
