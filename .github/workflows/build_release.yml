@@ -8,7 +8,7 @@ on:
       - '*'
 
 env:
-  PROJECTNAME_BASE: ${{ vars.PROJECTNAME || github.repository || github.event.repository.name || 'hello-world' }}
+  PROJECTNAME_BASE: ${{ vars.PROJECTNAME || 'hello-world' }}
 
 jobs:
 
