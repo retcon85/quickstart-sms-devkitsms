@@ -33,7 +33,7 @@ objects := $(patsubst %.c,$(TARGETDIR)%.rel,$(sources))
 banked_objects := $(patsubst %.c,$(TARGETDIR)%.rel,$(banked_sources))
 bank_names := $(sort $(subst .,,$(suffix $(basename $(banked_sources)))))
 # default behaviour is to automatically generate bank options, modify if you know what you are doing
-banks = $(foreach bank,$(bank_names),-Wl-b_$(bank)=0x8000)
+banks = $(foreach bank,$(bank_names),-Wl-b_$(bank)=0x$(subst bank,,$(bank))8000)
 # okay this is kind of diabolical...
 sorted_banked_objects := $(subst :slash:,/,$(notdir $(sort $(join $(suffix $(basename $(banked_objects))),$(addprefix /,$(subst /,:slash:,$(banked_objects)))))))
 
@@ -51,7 +51,7 @@ $(TARGETDIR):
 # packing stage - generally runs once to create a single output
 # pads to minimum 64kb with -pm to ensure SRAM is used
 $(target): $(TARGETDIR)$(ENTRYPOINT).ihx
-	ihx2sms -pm $< $(target)
+	makesms -pm $< $(target)
 
 # link stage - generally runs once to create a single output
 %.ihx: $(objects)
