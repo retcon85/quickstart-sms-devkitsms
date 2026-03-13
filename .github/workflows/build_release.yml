@@ -50,8 +50,8 @@ jobs:
       # else try to create a release without a discussion post
       run: |
         OUTPUTS=$({ ls *.sms; ls *.gg; ls *.rom; } 2>/dev/null | tr '\n' ' ') && \
-        echo $OUTPUTS | xargs gh release upload main --clobber || \
-        echo $OUTPUTS | xargs gh release create main --generate-notes --title '${{ github.repository }} ${{ github.ref_name }}' --discussion-category 'Announcements' || \
-        echo $OUTPUTS | xargs gh release create main --generate-notes --title '${{ github.repository }} ${{ github.ref_name }}'
+        echo $OUTPUTS | xargs gh release upload ${{ github.ref_name }} --clobber || \
+        echo $OUTPUTS | xargs gh release create ${{ github.ref_name }} --generate-notes --title '${{ github.repository }} ${{ github.ref_name }}' --discussion-category 'Announcements' || \
+        echo $OUTPUTS | xargs gh release create ${{ github.ref_name }} --generate-notes --title '${{ github.repository }} ${{ github.ref_name }}'
       env:
         GH_TOKEN: ${{ github.token }}
