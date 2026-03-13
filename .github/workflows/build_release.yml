@@ -8,7 +8,7 @@ on:
       - '*'
 
 env:
-  PROJECTNAME_BASE: ${{ vars.PROJECTNAME || 'hello-world' }}
+  PROJECTNAME: ${{ format('{0}-{1}', vars.PROJECTNAME || github.event.repository.name || 'hello-world', github.event_name == 'create' && github.ref_name || 'DEV') }}
 
 jobs:
 
@@ -19,15 +19,13 @@ jobs:
       uses: actions/checkout@v4
     - name: Build
       uses: docker://retcon85/toolchain-sms:1.1
-      env:
-        PROJECTNAME: ${{ github.event_name == 'create' && format('{0}-{1}', env.PROJECTNAME_BASE, github.ref_name) || format('{0}-DEV', env.PROJECTNAME_BASE) }}
       with:
         args: |
           "make clean all"
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: roms
+        name: ${{ env.PROJECTNAME }}
         path: |
           build/*.sms
           build/*.gg
@@ -44,7 +42,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
-        name: roms
+        name: ${{ env.PROJECTNAME }}
     - name: Release
       if: ${{ github.event_name == 'create' }}
       # if release already exists, attach the output artifacts to it

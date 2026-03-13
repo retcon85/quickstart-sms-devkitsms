@@ -4,6 +4,7 @@
 export PROJECTNAME ?= $(notdir $(CURDIR))
 # set USEPSGLIB to 0 to compile without audio support
 export USEPSGLIB ?= 1
+# change the TARGET_EXTENSION to gg to target Game Gear
 export TARGET_EXTENSION ?= sms
 
 # allow for unmanaged banks at beginning of ROM. 2 is usually the starting value here.

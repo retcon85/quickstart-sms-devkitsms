@@ -98,12 +98,19 @@ void main(void)
     // if you are using sprites, you might want to update their positions once per frame for fluid motion
     SMS_copySpritestoSAT();
 
-    // basic pause button handling
+// basic pause button handling
+#ifdef TARGET_GG
+    if (SMS_getKeysPressed() & GG_KEY_START)
+    {
+      paused = !paused;
+    }
+#else
     if (SMS_queryPauseRequested())
     {
       paused = !paused;
       SMS_resetPauseRequest();
     }
+#endif
 
     if (!paused)
     {
