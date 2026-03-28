@@ -16,6 +16,7 @@ export ENTRYPOINT := main
 export SMSLIB_DIR := /opt/devkitsms/lib
 export SMSINC_DIR := /opt/devkitsms/include
 
+export ENV ?= release
 export MKDIR := mkdir -p
 
 .PHONY: all

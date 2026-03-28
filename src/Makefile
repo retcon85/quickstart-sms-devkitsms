@@ -3,13 +3,19 @@
 TARGETDIR ?= ../build/
 PROJECTNAME ?= $(notdir $(CURDIR))
 TARGET_EXTENSION ?= sms
-SMSLIB_DIR ?= /opt/devkitsms/lib
-DEFINES := 
+SMSLIB_DIR ?= /opt/devkitsms/libENV ?= release
+ifeq ("$(ENV)", "debug")
+	ccflags := -DDEBUG
+	env_suffix := -DEBUG
+else ifeq ("$(ENV)", "test")
+	ccflags := -DDEBUG -DTEST
+	env_suffix := -DEBUG
+endif
 ifeq ("$(TARGET_EXTENSION)", "gg")
-	SMSLIB_VARIANT := SMSlib_GG.lib
-	DEFINES += -DTARGET_GG
+	smslib_variant := SMSlib_GG.lib
+	ccflags += -DTARGET_GG
 else
-	SMSLIB_VARIANT := SMSlib.lib
+	smslib_variant := SMSlib.lib
 endif
 SMSINC_DIR ?= /opt/devkitsms/include
 ENTRYPOINT ?= main
@@ -23,7 +29,7 @@ psglib := $(SMSLIB_DIR)/PSGlib.lib
 psgmacro := -DUSEPSGLIB
 endif
 
-target := $(TARGETDIR)$(PROJECTNAME).$(TARGET_EXTENSION)
+target := $(TARGETDIR)$(PROJECTNAME)$(env_suffix).$(TARGET_EXTENSION)
 headers := $(foreach dir,$(all_source_dirs),$(wildcard $(dir)*.h))
 banked_sources := $(foreach dir,$(all_source_dirs),$(wildcard $(dir)*.bank*.c))
 # using glob for sources. alternatively provide explict source lists here
@@ -42,7 +48,7 @@ mains := $(TARGETDIR)./$(ENTRYPOINT).rel
 
 # main build target
 .PHONY: build
-build: $(target)
+build: $(TARGETDIR) $(target)
 
 # create the build folder if it doesn't exist
 $(TARGETDIR):
@@ -51,21 +57,22 @@ $(TARGETDIR):
 # packing stage - generally runs once to create a single output
 # pads to minimum 64kb with -pm to ensure SRAM is used
 $(target): $(TARGETDIR)$(ENTRYPOINT).ihx
+# 	ihx2sms -pm $< $(target)
 	makesms -pm $< $(target)
 
 # link stage - generally runs once to create a single output
 %.ihx: $(objects)
-	sdcc -L$(SMSLIB_DIR) -o$@ -mz80 --no-std-crt0 --data-loc 0xC000 $(banks) $(SMSLIB_DIR)/crt0_sms.rel $(mains) $(SMSLIB_VARIANT) $(psglib) $(filter-out $(mains) $(banked_objects),$(objects)) $(sorted_banked_objects)
+	sdcc -L$(SMSLIB_DIR) -o$@ -mz80 --no-std-crt0 --data-loc 0xC000 $(banks) $(SMSLIB_DIR)/crt0_sms.rel $(mains) $(smslib_variant) $(psglib) $(filter-out $(mains) $(banked_objects),$(objects)) $(sorted_banked_objects)
 
 # compile unbanked sources
 $(filter-out $(banked_objects), $(objects)): $(TARGETDIR)%.rel: %.c $(headers) Makefile | $(TARGETDIR)
 	$(MKDIR) $(TARGETDIR)$(dir $*)
-	sdcc $(include_options) $(DEFINES) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
+	sdcc $(include_options) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) $(ccflags) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
 
 # compile banked sources
 $(banked_objects): $(TARGETDIR)%.rel: %.c $(headers) Makefile | $(TARGETDIR)
 	$(MKDIR) $(TARGETDIR)$(dir $*)
-	sdcc $(include_options) --constseg $(subst .,,$(suffix $(basename $<))) $(DEFINES) -DTHIS_BANK=$(subst .bank,,$(suffix $(basename $<))) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
+	sdcc $(include_options) --constseg $(subst .,,$(suffix $(basename $<))) $(ccflags) -DTHIS_BANK=$(subst .bank,,$(suffix $(basename $<))) --opt-code-speed -c -mz80 -o$(TARGETDIR)$(dir $*) --peep-file $(SMSLIB_DIR)/peep-rules.txt $(psgmacro) $<
 
 # make clean to remove the build folder and all generated files
 .PHONY: clean
